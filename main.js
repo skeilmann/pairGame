@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // функцию, генерирующую массив парных чисел.
   function createNumbersArray(count) {
-    count = (count % 2 === 0 && 3 < count && count < 101) ? count : 4;
+    // count = (count % 2 === 0 && 3 < count && count < 101) ? count : 4;
     let arr = [];
 
     for (i = 1; arr.length < count; i++) {
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
               revealedCards = []; // Reset revealed cards
               console.log(findedCards);
               if (findedCards.length === count) {
-                createEndGame(container);
+                createEndGame(container, cardWrap);
               }
             } else {
               // The cards don't match, hide them after a brief delay
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     gamePage.form.addEventListener('submit', function (e) {
       e.preventDefault();
-      count = gamePage.input.value * gamePage.input.value;
+      count = (gamePage.input.value % 2 === 0 && 3 < gamePage.input.value && gamePage.input.value < 101) ? gamePage.input.value * gamePage.input.value : 4;
 
       setTimeout(() => {
         startGame(generalContainer, count);
