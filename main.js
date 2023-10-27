@@ -86,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
               revealedCards = []; // Reset revealed cards
               console.log(findedCards);
               if (findedCards.length === count) {
-                createEndGame(container, cardWrap);
+                clearTimeout(endGameTimer);
+                createEndGame(container, 'You won!');
               }
             } else {
               // The cards don't match, hide them after a brief delay
@@ -148,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
   }
 
-  function createEndGame(container, cardWrap) {
+  function createEndGame(container, mesageToDisplay) {
     let endContainer = document.createElement('div');
     let endTitle = document.createElement('h3');
     let endButton = document.createElement('button');
@@ -156,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
     endContainer.classList.add('endContainer', 'position-absolute', 'p-2', 'bg-success', 'border', 'border-4', 'rounded-3');
     endButton.classList.add('btn', 'btn-warning');
     endButton.innerHTML = 'Restart game!';
-    endTitle.innerHTML = 'Timer has run out! <br>Do you want to run the game again?';
+    endTitle.innerHTML = mesageToDisplay + '<br>Do you want to run the game again?';
 
     endContainer.append(endTitle, endButton);
     container.append(endContainer);
@@ -168,7 +169,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     shuffledArray = [];
-    cardWrap.remove();
+    findedCards = [];
+    document.querySelector('.card-wrap').remove(); // clear all child elements
   }
 
   function hideElements(someElement) {
@@ -193,19 +195,20 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       count = (gamePage.input.value % 2 === 0 && 3 < gamePage.input.value && gamePage.input.value < 101) ? gamePage.input.value * gamePage.input.value : 4;
 
+      gamePage.input.value = ''; //clear the value of the input after entered a number
+      toggleFormButton(); // disable button after entered a number
+
       setTimeout(() => {
         startGame(generalContainer, count);
       }, 1100);
-      gamePage.input.value = ''; //clear the value of the input after entered a number
-      toggleFormButton(); // disable button after entered a number
 
       setTimeout(() => {
         hideElements(document.querySelector('.initContainer'));
       }, 700);
 
-      setTimeout(() => {
-        createEndGame(generalContainer, cardWrap);
-      }, 60000);
+      endGameTimer = setTimeout(function () {
+        createEndGame(generalContainer, 'Timer has run out');
+      }, 6 * 10000);
     })
   }
 
